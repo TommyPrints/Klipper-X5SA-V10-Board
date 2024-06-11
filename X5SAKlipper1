@@ -1,0 +1,208 @@
+[include fluidd.cfg]
+[include mainsail.cfg]
+#[include fluidd.cfg]
+[mcu]
+serial: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+restart_method: command
+
+[virtual_sdcard]
+path: ~/printer_data/gcodes
+on_error_gcode: CANCEL_PRINT
+
+[printer]
+kinematics: corexy
+max_velocity: 500
+max_accel: 4500
+square_corner_velocity: 8
+max_z_velocity: 25
+max_z_accel: 30
+
+[stepper_x]
+step_pin: PE5
+dir_pin: !PF1
+enable_pin: !PF0
+microsteps: 16
+rotation_distance: 20
+endstop_pin: !PC15
+position_endstop: -8
+position_min: -8
+position_max: 310
+homing_speed: 100
+homing_retract_dist: 10
+second_homing_speed: 10.0
+
+[stepper_y]
+step_pin: PF9
+dir_pin: !PF3
+enable_pin: !PF5
+microsteps: 16
+rotation_distance: 20
+endstop_pin: !PC14
+position_endstop: -10
+position_min: -10
+position_max: 310
+homing_retract_dist: 10
+homing_speed: 100
+second_homing_speed: 10.0
+
+[stepper_z]
+step_pin: PA6
+dir_pin: PF15
+enable_pin: !PA5
+microsteps: 16
+rotation_distance: 4
+endstop_pin: probe:z_virtual_endstop
+position_max: 400
+position_min: -10
+
+[extruder]
+step_pin: PB1
+dir_pin: PF13 #change to !PF13 for X5SA Pro Titan Extruder
+enable_pin: !PF14
+microsteps: 16
+rotation_distance: 2.09
+nozzle_diameter: 0.400
+filament_diameter: 1.750
+heater_pin: PG7
+sensor_type: ATC Semitec 104GT-2
+sensor_pin: PC3
+#control = pid
+#pid_kp = 23.292
+#pid_ki = 1.294
+#pid_kd = 104.812
+min_temp: 0
+max_temp: 305
+min_extrude_temp: 170
+max_extrude_only_distance: 300
+max_extrude_cross_section: 5
+
+[heater_bed]
+heater_pin: PE2
+sensor_type: EPCOS 100K B57560G104F
+sensor_pin: PC2
+min_temp: 0
+max_temp: 130
+control = pid
+pid_kp = 72.353
+pid_ki = 1.227
+pid_kd = 1066.301
+
+[heater_fan hotend_fan]
+heater: extruder
+heater_temp: 50.0
+pin: PG9
+
+[fan]
+pin: PG0
+
+[controller_fan drivers_fan]
+pin: PD7
+
+[filament_switch_sensor filament_sensor]
+pause_on_runout: True
+runout_gcode: M25
+switch_pin: !PE6
+
+[output_pin beeper]
+pin: PA8
+
+[safe_z_home]
+home_xy_position: 145, 165
+speed: 50
+z_hop: 10
+z_hop_speed: 5
+
+[bed_screws]
+screw1: 5, 5
+screw2: 165, 5
+screw3: 325, 5
+screw4: 5, 325
+screw5: 165, 325
+screw6: 325, 325
+
+[bed_mesh]
+speed: 160
+probe_count: 5, 5
+horizontal_move_z: 10
+algorithm: lagrange
+mesh_min : 45, 20
+mesh_max : 280,300
+mesh_pps: 0
+fade_start: 1
+fade_end: 10
+fade_target: 0
+
+[gcode_macro G29]
+gcode:
+    BED_MESH_CLEAR
+    BED_MESH_CALIBRATE
+    BED_MESH_PROFILE SAVE=default1
+    BED_MESH_PROFILE LOAD=default1
+
+[bed_screws]
+screw1: 5, 5
+screw2: 165, 5
+screw3: 325, 5
+screw4: 5, 325
+screw5: 165, 325
+screw6: 325, 325
+
+[probe]
+x_offset: 45
+y_offset: -10
+pin: !PE3
+speed: 30
+#z_offset = 5
+
+
+[include moonraker_obico_macros.cfg]
+
+#*# <---------------------- SAVE_CONFIG ---------------------->
+#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
+#*#
+#*# [extruder]
+#*# control = pid
+#*# pid_kp = 23.166
+#*# pid_ki = 1.161
+#*# pid_kd = 115.542
+#*#
+#*# [bed_mesh default]
+#*# version = 1
+#*# points =
+#*# 	  -0.065000, -0.098750, -0.072500, -0.038750, -0.065000
+#*# 	  0.010000, 0.021250, 0.026250, 0.030000, 0.003750
+#*# 	  0.025000, 0.066250, 0.050000, 0.050000, 0.013750
+#*# 	  0.061250, 0.065000, 0.038750, 0.012500, -0.000000
+#*# 	  -0.026250, -0.077500, -0.107500, -0.110000, -0.088750
+#*# x_count = 5
+#*# y_count = 5
+#*# mesh_x_pps = 0
+#*# mesh_y_pps = 0
+#*# algo = lagrange
+#*# tension = 0.2
+#*# min_x = 30.0
+#*# max_x = 300.0
+#*# min_y = 30.0
+#*# max_y = 300.0
+#*#
+#*# [probe]
+#*# z_offset = 6.440
+#*#
+#*# [bed_mesh bed]
+#*# version = 1
+#*# points =
+#*# 	  -0.682500, -0.562500, -0.427500, -0.216250, 0.118750
+#*# 	  -0.540000, -0.367500, -0.160000, 0.162500, 0.407500
+#*# 	  -0.520000, -0.282500, -0.007500, 0.281250, 0.553750
+#*# 	  -0.503750, -0.318750, -0.097500, 0.227500, 0.461250
+#*# 	  -0.670000, -0.561250, -0.426250, -0.186250, 0.151250
+#*# x_count = 5
+#*# y_count = 5
+#*# mesh_x_pps = 0
+#*# mesh_y_pps = 0
+#*# algo = lagrange
+#*# tension = 0.2
+#*# min_x = 30.0
+#*# max_x = 300.0
+#*# min_y = 30.0
+#*# max_y = 300.0
